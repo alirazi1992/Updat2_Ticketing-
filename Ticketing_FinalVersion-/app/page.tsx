@@ -84,12 +84,20 @@ export default function Home() {
 
       const mapped = await Promise.all(
         apiTickets.map(async (apiTicket) => {
-          const messages = await apiRequest<ApiTicketMessageDto[]>(
-            `/api/tickets/${apiTicket.id}/messages`,
-            {
-              token: authToken,
-            }
-          );
+          let messages: ApiTicketMessageDto[] = [];
+          try {
+            messages = await apiRequest<ApiTicketMessageDto[]>(
+              `/api/tickets/${apiTicket.id}/messages`,
+              {
+                token: authToken,
+              }
+            );
+          } catch (error) {
+            console.error("Failed to load ticket messages", {
+              ticketId: apiTicket.id,
+              error,
+            });
+          }
 
           return mapApiTicketToUi(
             apiTicket,
@@ -171,7 +179,9 @@ export default function Home() {
   };
 
   const handleTicketCreate = async (draft: Ticket) => {
-    if (!token) return;
+    if (!token) {
+      throw new Error("Missing authentication token");
+    }
 
     const catMap =
       Object.values(categoriesRef.current).some(
@@ -189,7 +199,7 @@ export default function Home() {
           "دسته‌بندی‌ها هنوز از سرور بارگذاری نشده‌اند. چند لحظه بعد دوباره تلاش کنید.",
         variant: "destructive",
       });
-      return;
+      throw new Error("Category mapping not available");
     }
 
     try {
