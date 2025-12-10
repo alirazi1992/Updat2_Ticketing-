@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -91,9 +92,46 @@ builder.Services.AddCors(options =>
 // =======================
 // MVC / Swagger
 // =======================
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Always serialize enums as strings to match the frontend expectations
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        // Emit camelCase properties so the frontend API types align with the backend payloads
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Reflect enum string values in Swagger schemas
+    options.MapType<Ticketing.Backend.Domain.Enums.TicketStatus>(() =>
+        new Microsoft.OpenApi.Models.OpenApiSchema
+        {
+            Type = "string",
+            Enum = Enum.GetNames(typeof(Ticketing.Backend.Domain.Enums.TicketStatus))
+                .Select(name => (Microsoft.OpenApi.Any.IOpenApiAny)new Microsoft.OpenApi.Any.OpenApiString(name))
+                .ToList()
+        });
+
+    options.MapType<Ticketing.Backend.Domain.Enums.TicketPriority>(() =>
+        new Microsoft.OpenApi.Models.OpenApiSchema
+        {
+            Type = "string",
+            Enum = Enum.GetNames(typeof(Ticketing.Backend.Domain.Enums.TicketPriority))
+                .Select(name => (Microsoft.OpenApi.Any.IOpenApiAny)new Microsoft.OpenApi.Any.OpenApiString(name))
+                .ToList()
+        });
+
+    options.MapType<Ticketing.Backend.Domain.Enums.UserRole>(() =>
+        new Microsoft.OpenApi.Models.OpenApiSchema
+        {
+            Type = "string",
+            Enum = Enum.GetNames(typeof(Ticketing.Backend.Domain.Enums.UserRole))
+                .Select(name => (Microsoft.OpenApi.Any.IOpenApiAny)new Microsoft.OpenApi.Any.OpenApiString(name))
+                .ToList()
+        });
+});
 
 var app = builder.Build();
 
