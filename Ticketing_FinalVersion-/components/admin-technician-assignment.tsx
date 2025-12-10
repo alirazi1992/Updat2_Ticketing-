@@ -158,7 +158,7 @@ const getMatchReasons = (technician: any, ticket: any) => {
   const reasons: string[] = []
 
   if (technician.specialties.includes(ticket.category)) {
-    reasons.push(`متخصص ${categoryLabels[ticket.category]}`)
+    reasons.push(`متخصص ${getCategoryLabel(ticket)}`)
   }
 
   if (technician.rating >= 4.5) {
@@ -195,10 +195,10 @@ const statusColors: Record<string, string> = {
 }
 
 const statusLabels: Record<string, string> = {
-  open: "???",
-  "in-progress": "?? ??? ?????",
-  resolved: "?? ???",
-  closed: "????",
+  open: "باز",
+  "in-progress": "در حال انجام",
+  resolved: "حل شده",
+  closed: "بسته",
 }
 
 const priorityColors: Record<string, string> = {
@@ -209,10 +209,10 @@ const priorityColors: Record<string, string> = {
 }
 
 const priorityLabels: Record<string, string> = {
-  low: "??",
-  medium: "?????",
-  high: "????",
-  urgent: "????",
+  low: "کم",
+  medium: "متوسط",
+  high: "بالا",
+  urgent: "فوری",
 }
 
 const categoryIcons: Record<string, LucideIcon> = {
@@ -225,12 +225,20 @@ const categoryIcons: Record<string, LucideIcon> = {
 }
 
 const categoryLabels: Record<string, string> = {
-  hardware: "?????????",
-  software: "?????????",
-  network: "????",
-  email: "?????",
-  security: "?????",
-  access: "??????",
+  hardware: "سخت‌افزار",
+  software: "نرم‌افزار",
+  network: "شبکه",
+  email: "ایمیل",
+  security: "امنیت",
+  access: "دسترسی",
+}
+
+const getCategoryLabel = (ticketOrId: any) => {
+  const id = typeof ticketOrId === "string" ? ticketOrId : ticketOrId?.category
+  if (typeof ticketOrId === "object" && ticketOrId?.categoryLabel) {
+    return ticketOrId.categoryLabel
+  }
+  return categoryLabels[id] ?? id
 }
 
 // Mock technicians data
@@ -633,7 +641,7 @@ export function AdminTechnicianAssignment({ tickets, technicians: technicianOpti
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <CategoryIcon className="w-4 h-4" />
-                            <span className="text-sm">{categoryLabels[ticket.category]}</span>
+                            <span className="text-sm">{getCategoryLabel(ticket)}</span>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -734,7 +742,7 @@ export function AdminTechnicianAssignment({ tickets, technicians: technicianOpti
                   <Badge className={priorityColors[selectedTicket.priority]}>
                     {priorityLabels[selectedTicket.priority]}
                   </Badge>
-                  <Badge variant="outline">{categoryLabels[selectedTicket.category]}</Badge>
+                        <Badge variant="outline">{getCategoryLabel(selectedTicket)}</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">درخواست‌کننده: {selectedTicket.clientName}</p>
               </div>
@@ -917,7 +925,7 @@ export function AdminTechnicianAssignment({ tickets, technicians: technicianOpti
                         <Badge className={priorityColors[ticket.priority]} variant="outline">
                           {priorityLabels[ticket.priority]}
                         </Badge>
-                        <Badge variant="outline">{categoryLabels[ticket.category]}</Badge>
+                        <Badge variant="outline">{getCategoryLabel(ticket)}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">درخواست‌کننده: {ticket.clientName}</p>
                     </div>

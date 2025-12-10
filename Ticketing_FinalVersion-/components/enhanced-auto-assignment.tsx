@@ -225,6 +225,13 @@ const categoryLabels: Record<string, string> = {
   security: "امنیت",
   access: "دسترسی",
 }
+const getCategoryLabel = (ticketOrId: any) => {
+  const id = typeof ticketOrId === "string" ? ticketOrId : ticketOrId?.category
+  if (typeof ticketOrId === "object" && ticketOrId?.categoryLabel) {
+    return ticketOrId.categoryLabel
+  }
+  return categoryLabels[id] ?? id
+}
 
 interface EnhancedAutoAssignmentProps {
   tickets: any[]
@@ -372,7 +379,7 @@ export function EnhancedAutoAssignment({
     const reasons: string[] = []
 
     if (scores.expertise > 80) {
-      reasons.push(`متخصص ${categoryLabels[ticket.category]}`)
+      reasons.push(`متخصص ${getCategoryLabel(ticket)}`)
     }
 
     if (scores.availability === 100) {
@@ -700,7 +707,7 @@ export function EnhancedAutoAssignment({
                                 <div className="text-xs text-muted-foreground">
                                   {tech.specialties
                                     .slice(0, 2)
-                                    .map((s) => categoryLabels[s])
+                                    .map((s) => getCategoryLabel(s))
                                     .join("، ")}
                                 </div>
                               </div>
@@ -889,7 +896,7 @@ export function EnhancedAutoAssignment({
                         <div className="flex items-center gap-2 mb-2">
                           <span className="font-medium">{ticket.title}</span>
                           <Badge variant="outline">{priorityLabels[ticket.priority]}</Badge>
-                          <Badge variant="outline">{categoryLabels[ticket.category]}</Badge>
+                          <Badge variant="outline">{getCategoryLabel(ticket)}</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">درخواست‌کننده: {ticket.clientName}</p>
                       </div>

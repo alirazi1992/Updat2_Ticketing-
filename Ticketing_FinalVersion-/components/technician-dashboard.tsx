@@ -74,10 +74,10 @@ const statusColors: Record<TicketStatus, string> = {
 };
 
 const statusLabels: Record<TicketStatus, string> = {
-  open: "???",
-  "in-progress": "?? ??? ?????",
-  resolved: "?? ???",
-  closed: "????",
+  open: "باز",
+  "in-progress": "در حال انجام",
+  resolved: "حل شده",
+  closed: "بسته",
 };
 
 const priorityColors: Record<TicketPriority, string> = {
@@ -88,19 +88,26 @@ const priorityColors: Record<TicketPriority, string> = {
 };
 
 const priorityLabels: Record<TicketPriority, string> = {
-  low: "??",
-  medium: "?????",
-  high: "????",
-  urgent: "????",
+  low: "کم",
+  medium: "متوسط",
+  high: "بالا",
+  urgent: "فوری",
 };
 
 const categoryLabels: Record<TicketCategory, string> = {
-  hardware: "?????????",
-  software: "?????????",
-  network: "????",
-  email: "?????",
-  security: "?????",
-  access: "??????",
+  hardware: "سخت‌افزار",
+  software: "نرم‌افزار",
+  network: "شبکه",
+  email: "ایمیل",
+  security: "امنیت",
+  access: "دسترسی",
+};
+const getCategoryLabel = (ticketOrId: any) => {
+  const id = typeof ticketOrId === "string" ? ticketOrId : ticketOrId?.category;
+  if (typeof ticketOrId === "object" && ticketOrId?.categoryLabel) {
+    return ticketOrId.categoryLabel;
+  }
+  return categoryLabels[id as TicketCategory] ?? id;
 };
 
 /* ====================== COMPONENT ====================== */
@@ -300,8 +307,8 @@ export function TechnicianDashboard({
 
     if (!responseMessage.trim()) {
       toast({
-        title: "???",
-        description: "????? ???? ???? ?? ???? ????",
+        title: "متن پاسخ خالی است",
+        description: "لطفاً توضیحی برای پاسخ وارد کنید.",
         variant: "destructive",
       });
       return;
@@ -317,8 +324,8 @@ export function TechnicianDashboard({
       }
 
       toast({
-        title: "???? ????? ??",
-        description: "???? ??? ?? ?????? ??? ? ?? ????? ??????????? ??",
+        title: "پاسخ ثبت شد",
+        description: "پاسخ و وضعیت تیکت با موفقیت به‌روزرسانی شد.",
       });
 
       setResponseDialogOpen(false);
@@ -326,8 +333,8 @@ export function TechnicianDashboard({
       setSelectedTicket(null);
     } catch {
       toast({
-        title: "???",
-        description: "?? ????? ???? ????? ??? ???",
+        title: "خطا در ثبت پاسخ",
+        description: "در ثبت پاسخ مشکلی پیش آمد. دوباره تلاش کنید.",
         variant: "destructive",
       });
     }
@@ -576,7 +583,7 @@ export function TechnicianDashboard({
                       </TableCell>
                       <TableCell>
                         <span className="text-sm font-iran">
-                          {categoryLabels[ticket.category]}
+                          {getCategoryLabel(ticket)}
                         </span>
                       </TableCell>
                       <TableCell>
@@ -697,7 +704,7 @@ export function TechnicianDashboard({
                           دسته‌بندی:
                         </span>
                         <span className="font-iran">
-                          {categoryLabels[selectedTicket.category]}
+                          {getCategoryLabel(selectedTicket)}
                         </span>
                       </div>
                       <div className="flex justify-between">

@@ -77,6 +77,13 @@ const categoryLabels: Record<string, string> = {
   security: "امنیت",
   access: "دسترسی",
 }
+const getCategoryLabel = (ticketOrId: any) => {
+  const id = typeof ticketOrId === "string" ? ticketOrId : ticketOrId?.category
+  if (typeof ticketOrId === "object" && ticketOrId?.categoryLabel) {
+    return ticketOrId.categoryLabel
+  }
+  return categoryLabels[id] ?? id
+}
 
 interface AdminTicketListProps {
   tickets: any[]
@@ -213,7 +220,7 @@ export function AdminTicketList({ tickets, onTicketUpdate }: AdminTicketListProp
                 <td>${ticket.title}</td>
                 <td class="status-${ticket.status}">${statusLabels[ticket.status]}</td>
                 <td class="priority-${ticket.priority}">${priorityLabels[ticket.priority]}</td>
-                <td>${categoryLabels[ticket.category]}</td>
+                <td>${getCategoryLabel(ticket)}</td>
                 <td>${ticket.clientName}</td>
                 <td>${ticket.assignedTechnicianName || "تعیین نشده"}</td>
                 <td>${new Date(ticket.createdAt).toLocaleDateString("fa-IR")}</td>
@@ -257,7 +264,7 @@ export function AdminTicketList({ tickets, onTicketUpdate }: AdminTicketListProp
           `"${ticket.title}"`,
           statusLabels[ticket.status],
           priorityLabels[ticket.priority],
-          categoryLabels[ticket.category],
+          getCategoryLabel(ticket),
           `"${ticket.clientName}"`,
           ticket.clientEmail,
           `"${ticket.assignedTechnicianName || "تعیین نشده"}"`,
@@ -464,7 +471,7 @@ export function AdminTicketList({ tickets, onTicketUpdate }: AdminTicketListProp
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <span className="text-sm font-iran">{categoryLabels[ticket.category]}</span>
+                          <span className="text-sm font-iran">{getCategoryLabel(ticket)}</span>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -548,7 +555,7 @@ export function AdminTicketList({ tickets, onTicketUpdate }: AdminTicketListProp
                         {priorityLabels[selectedTicket.priority]}
                       </Badge>
                       <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border">
-                        <span className="text-sm font-iran">{categoryLabels[selectedTicket.category]}</span>
+                        <span className="text-sm font-iran">{getCategoryLabel(selectedTicket)}</span>
                       </div>
                     </div>
                   </div>
@@ -706,7 +713,7 @@ export function AdminTicketList({ tickets, onTicketUpdate }: AdminTicketListProp
                         <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
                           <span className="text-sm text-muted-foreground font-iran">دسته‌بندی:</span>
                           <span className="text-sm font-medium font-iran">
-                            {categoryLabels[selectedTicket.category]}
+                            {getCategoryLabel(selectedTicket)}
                           </span>
                         </div>
 

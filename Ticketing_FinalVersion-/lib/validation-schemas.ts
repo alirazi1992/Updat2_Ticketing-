@@ -1,4 +1,5 @@
 import * as yup from "yup"
+import type { CategoriesData } from "@/services/categories-types"
 
 // Phone number validation for Iranian numbers
 const validatePhoneNumber = (phone: string): boolean => {
@@ -7,11 +8,25 @@ const validatePhoneNumber = (phone: string): boolean => {
 }
 
 // Issue Selection Schema (Step 1)
-export const issueSelectionSchema = yup.object({
-  priority: yup.string().required("انتخاب اولویت الزامی است"),
-  mainIssue: yup.string().required("انتخاب دسته اصلی مشکل الزامی است"),
-  subIssue: yup.string().required("انتخاب مشکل دقیق الزامی است"),
-})
+export const issueSelectionSchema = (categories?: CategoriesData) =>
+  yup.object({
+    priority: yup.string().required("انتخاب اولویت مشکل الزامی است"),
+    mainIssue: yup.string().required("انتخاب دسته اصلی مشکل الزامی است"),
+    subIssue: yup.string().when("mainIssue", (mainIssue, schema: yup.StringSchema) => {
+      const hasSubIssues =
+        typeof mainIssue === "string" &&
+        !!mainIssue &&
+        !!categories?.[mainIssue] &&
+        Object.keys(categories[mainIssue].subIssues || {}).length > 0
+
+      if (hasSubIssues) {
+        return schema.required("انتخاب زیر دسته الزامی است")
+      }
+
+      // If the selected category has no sub issues, treat this field as optional
+      return schema.optional().nullable().transform((value) => value ?? "")
+    }),
+  })
 
 // Ticket Details Schema (Step 2)
 export const ticketDetailsSchema = yup.object({
@@ -85,8 +100,8 @@ export const contactInfoSchema = yup.object({
 })
 
 // Update the combined schema to include contact info
-export const getCombinedSchema = (step: number) => {
-  const baseSchema = contactInfoSchema.concat(issueSelectionSchema)
+export const getCombinedSchema = (step: number, categories?: CategoriesData) => {
+  const baseSchema = contactInfoSchema.concat(issueSelectionSchema(categories))
 
   if (step === 1) {
     return baseSchema
@@ -96,7 +111,7 @@ export const getCombinedSchema = (step: number) => {
 }
 
 // Legacy schemas for backward compatibility
-export const generalInfoSchema = issueSelectionSchema
+export const generalInfoSchema = issueSelectionSchema()
 
 // Ticket access schema
 export const ticketAccessSchema = yup.object({

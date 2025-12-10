@@ -16,6 +16,13 @@ const categoryLabels: Record<string, string> = {
   security: "امنیت",
   access: "دسترسی",
 }
+const getCategoryLabel = (ticketOrId: any) => {
+  const id = typeof ticketOrId === "string" ? ticketOrId : ticketOrId?.category
+  if (typeof ticketOrId === "object" && ticketOrId?.categoryLabel) {
+    return ticketOrId.categoryLabel
+  }
+  return categoryLabels[id] ?? id
+}
 
 const priorityLabels: Record<string, string> = {
   low: "کم",
@@ -157,7 +164,7 @@ export function AssignmentCriteriaDialog({
     const reasons: string[] = []
 
     if (technician.specialties.includes(ticket.category)) {
-      reasons.push(`متخصص ${categoryLabels[ticket.category]}`)
+      reasons.push(`متخصص ${getCategoryLabel(ticket)}`)
     }
 
     if (technician.rating >= 4.5) {
@@ -237,7 +244,7 @@ export function AssignmentCriteriaDialog({
                   </div>
                   <div className="flex items-center gap-2">
                     <Award className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm">دسته‌بندی: {categoryLabels[ticket.category]}</span>
+                    <span className="text-sm">دسته‌بندی: {getCategoryLabel(ticket)}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-muted-foreground" />

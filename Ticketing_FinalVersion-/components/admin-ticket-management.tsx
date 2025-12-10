@@ -51,10 +51,10 @@ const statusColors: Record<string, string> = {
 }
 
 const statusLabels: Record<string, string> = {
-  open: "???",
-  "in-progress": "?? ??? ?????",
-  resolved: "?? ???",
-  closed: "????",
+  open: "باز",
+  "in-progress": "در حال انجام",
+  resolved: "حل شده",
+  closed: "بسته",
 }
 
 const statusIcons: Record<string, LucideIcon> = {
@@ -72,19 +72,26 @@ const priorityColors: Record<string, string> = {
 }
 
 const priorityLabels: Record<string, string> = {
-  low: "??",
-  medium: "?????",
-  high: "????",
-  urgent: "????",
+  low: "کم",
+  medium: "متوسط",
+  high: "بالا",
+  urgent: "فوری",
 }
 
 const categoryLabels: Record<string, string> = {
-  hardware: "?????????",
-  software: "?????????",
-  network: "????",
-  email: "?????",
-  security: "?????",
-  access: "??????",
+  hardware: "سخت‌افزار",
+  software: "نرم‌افزار",
+  network: "شبکه",
+  email: "ایمیل",
+  security: "امنیت",
+  access: "دسترسی",
+}
+const getCategoryLabel = (ticketOrId: any) => {
+  const id = typeof ticketOrId === "string" ? ticketOrId : ticketOrId?.category
+  if (typeof ticketOrId === "object" && ticketOrId?.categoryLabel) {
+    return ticketOrId.categoryLabel
+  }
+  return categoryLabels[id] ?? id
 }
 
 const initialTechnicians = [
@@ -378,7 +385,7 @@ export function AdminTicketManagement({ tickets, technicians: technicianOptions,
                   <td>${ticket.title}</td>
                   <td class="status-${ticket.status}">${statusLabels[ticket.status]}</td>
                   <td class="priority-${ticket.priority}">${priorityLabels[ticket.priority]}</td>
-                  <td>${categoryLabels[ticket.category]}</td>
+                  <td>${getCategoryLabel(ticket)}</td>
                   <td>${ticket.clientName}</td>
                   <td>${ticket.assignedTechnicianName || "تعیین نشده"}</td>
                   <td>${new Date(ticket.createdAt).toLocaleDateString("fa-IR")}</td>
@@ -424,7 +431,7 @@ export function AdminTicketManagement({ tickets, technicians: technicianOptions,
         ticket.title,
         statusLabels[ticket.status],
         priorityLabels[ticket.priority],
-        categoryLabels[ticket.category],
+        getCategoryLabel(ticket),
         ticket.clientName,
         ticket.assignedTechnicianName || "تعیین نشده",
         new Date(ticket.createdAt).toLocaleDateString("fa-IR"),
@@ -787,7 +794,7 @@ export function AdminTicketManagement({ tickets, technicians: technicianOptions,
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <span className="text-sm font-iran">{categoryLabels[ticket.category]}</span>
+                          <span className="text-sm font-iran">{getCategoryLabel(ticket)}</span>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -913,7 +920,7 @@ export function AdminTicketManagement({ tickets, technicians: technicianOptions,
                 <div className="text-right">
                   <h4 className="font-medium font-iran">{selectedTicketForAssign?.title}</h4>
                   <p className="text-sm text-muted-foreground mt-1 font-iran">
-                    دسته‌بندی: {selectedTicketForAssign && categoryLabels[selectedTicketForAssign.category]} | اولویت:{" "}
+                    دسته‌بندی: {selectedTicketForAssign && getCategoryLabel(selectedTicketForAssign)} | اولویت:{" "}
                     {selectedTicketForAssign && priorityLabels[selectedTicketForAssign.priority]}
                   </p>
                 </div>
@@ -1027,7 +1034,7 @@ export function AdminTicketManagement({ tickets, technicians: technicianOptions,
                         {priorityLabels[selectedTicket.priority]}
                       </Badge>
                       <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border">
-                        <span className="text-sm font-iran">{categoryLabels[selectedTicket.category]}</span>
+                        <span className="text-sm font-iran">{getCategoryLabel(selectedTicket)}</span>
                       </div>
                     </div>
                   </div>
@@ -1185,7 +1192,7 @@ export function AdminTicketManagement({ tickets, technicians: technicianOptions,
                         <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
                           <span className="text-sm text-muted-foreground font-iran">دسته‌بندی:</span>
                           <span className="text-sm font-medium font-iran">
-                            {categoryLabels[selectedTicket.category]}
+                            {getCategoryLabel(selectedTicket)}
                           </span>
                         </div>
 

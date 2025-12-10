@@ -18,8 +18,10 @@ export interface Ticket {
   status: TicketStatus
   priority: TicketPriority
   category: TicketCategory
+  categoryLabel?: string
   categoryId?: number
   subcategory?: string | null
+  subcategoryLabel?: string | null
   subcategoryId?: number | null
   clientName: string
   clientEmail: string

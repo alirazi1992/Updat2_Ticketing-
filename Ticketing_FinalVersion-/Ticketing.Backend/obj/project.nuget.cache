@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "V2/7F0CXll0=",
+  "dgSpecHash": "vLfWHrqksig=",
   "success": true,
-  "projectFilePath": "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
+  "projectFilePath": "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\a.razi\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\a.razi\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.4\\microsoft.aspnetcore.authentication.jwtbearer.8.0.4.nupkg.sha512",
@@ -76,9 +76,9 @@
       "code": "NU1900",
       "level": "Warning",
       "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
-      "projectPath": "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
+      "projectPath": "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
+      "filePath": "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
       "targetGraphs": []
     }
   ]

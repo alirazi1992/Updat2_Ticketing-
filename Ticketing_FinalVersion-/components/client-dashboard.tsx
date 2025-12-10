@@ -62,10 +62,10 @@ const statusColors: Record<TicketStatus, string> = {
 };
 
 const statusLabels: Record<TicketStatus, string> = {
-  open: "???",
-  "in-progress": "?? ??? ?????",
-  resolved: "?? ???",
-  closed: "????",
+  open: "باز",
+  "in-progress": "در حال انجام",
+  resolved: "حل شده",
+  closed: "بسته",
 };
 
 const priorityColors: Record<TicketPriority, string> = {
@@ -76,20 +76,22 @@ const priorityColors: Record<TicketPriority, string> = {
 };
 
 const priorityLabels: Record<TicketPriority, string> = {
-  low: "??",
-  medium: "?????",
-  high: "????",
-  urgent: "????",
+  low: "کم",
+  medium: "متوسط",
+  high: "بالا",
+  urgent: "فوری",
 };
 
 const categoryLabels: Record<TicketCategory, string> = {
-  hardware: "?????????",
-  software: "?????????",
-  network: "????",
-  email: "?????",
-  security: "?????",
-  access: "??????",
+  hardware: "سخت‌افزار",
+  software: "نرم‌افزار",
+  network: "شبکه",
+  email: "ایمیل",
+  security: "امنیت",
+  access: "دسترسی",
 };
+const getCategoryLabel = (cat: string, categoriesData: CategoriesData) =>
+  categoriesData?.[cat]?.label ?? categoryLabels[cat as TicketCategory] ?? cat;
 
 /* =========================
    Component Props
@@ -389,7 +391,7 @@ export function ClientDashboard({
                         </TableCell>
                         <TableCell>
                           <span className="text-sm font-iran">
-                            {categoryLabels[ticket.category]}
+                            {getCategoryLabel(ticket.category, categoriesData)}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -505,7 +507,7 @@ export function ClientDashboard({
                           دسته‌بندی:
                         </span>
                         <span className="font-iran">
-                          {categoryLabels[selectedTicket.category]}
+                          {getCategoryLabel(selectedTicket.category, categoriesData)}
                         </span>
                       </div>
                       <div className="flex justify-between">

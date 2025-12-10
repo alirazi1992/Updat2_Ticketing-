@@ -12,6 +12,7 @@ import {
 
 import { apiRequest } from "@/lib/api-client";
 import type {
+  ApiCategoryResponse,
   ApiTicketMessageDto,
   ApiTicketResponse,
   ApiUserDto,
@@ -343,8 +344,35 @@ export default function Home() {
     });
   }, [user]);
 
-  const handleCategoryUpdate = (updatedCategories: CategoriesData) => {
-    void saveCategories(updatedCategories);
+  const handleCategoryUpdate = async (updatedCategories: CategoriesData) => {
+    let nextCategories: CategoriesData = { ...updatedCategories };
+
+    // If admin creates a new category (no backendId), sync it to the backend so tickets can use it
+    if (token && user?.role === "admin") {
+      for (const [key, category] of Object.entries(updatedCategories)) {
+        if (typeof category.backendId === "undefined") {
+          try {
+            const created = await apiRequest<ApiCategoryResponse>("/api/categories", {
+              method: "POST",
+              token,
+              body: {
+                name: category.label ?? category.id ?? key,
+                description: category.description ?? category.label ?? "",
+              },
+            });
+
+            nextCategories = {
+              ...nextCategories,
+              [key]: { ...category, backendId: created.id },
+            };
+          } catch (error) {
+            console.error("Failed to sync category to backend", key, error);
+          }
+        }
+      }
+    }
+
+    await saveCategories(nextCategories);
   };
 
   const navItems = useMemo<DashboardNavItem[]>(() => {

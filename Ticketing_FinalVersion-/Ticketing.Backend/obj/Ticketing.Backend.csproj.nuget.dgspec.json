@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj": {}
+    "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj": {
+    "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
+        "projectUniqueName": "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
         "projectName": "Ticketing.Backend",
-        "projectPath": "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
+        "projectPath": "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\Ticketing.Backend.csproj",
         "packagesPath": "C:\\Users\\a.razi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a.razi\\Desktop\\TikG\\Ticketing_FinalVersion-\\Ticketing.Backend\\obj\\",
+        "outputPath": "C:\\Users\\a.razi\\Desktop\\TikJ\\Ticketing_FinalVersion-\\Ticketing.Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

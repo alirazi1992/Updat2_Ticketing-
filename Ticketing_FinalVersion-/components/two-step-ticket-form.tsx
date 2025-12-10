@@ -38,7 +38,7 @@ export function TwoStepTicketForm({ onClose, onSubmit, categoriesData }: TwoStep
   const [attachedFiles, setAttachedFiles] = useState<UploadedFile[]>([])
   const [isSaving, setIsSaving] = useState(false)
 
-  const activeSchema = useMemo(() => getCombinedSchema(currentStep), [currentStep])
+  const activeSchema = useMemo(() => getCombinedSchema(currentStep, categoriesData), [currentStep, categoriesData])
 
   const {
     control,
@@ -130,15 +130,6 @@ export function TwoStepTicketForm({ onClose, onSubmit, categoriesData }: TwoStep
       return
     }
 
-    if (data.subIssue && !selectedSubcategory?.backendId) {
-      toast({
-        title: "زیر دسته معتبر نیست",
-        description: "زیر دسته انتخاب‌شده از سرور دریافت نشده است. لطفا دوباره انتخاب کنید.",
-        variant: "destructive",
-      })
-      return
-    }
-
     try {
       setIsSaving(true)
 
@@ -178,6 +169,13 @@ export function TwoStepTicketForm({ onClose, onSubmit, categoriesData }: TwoStep
             ),
           ),
         },
+      }
+
+      if (data.subIssue && !selectedSubcategory?.backendId) {
+        ticketData.dynamicFields = {
+          ...ticketData.dynamicFields,
+          localSubIssue: selectedSubcategory?.label ?? data.subIssue,
+        }
       }
 
       await onSubmit(ticketData)
